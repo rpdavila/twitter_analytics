@@ -30,13 +30,24 @@ except mariadb.Error as e:
     sys.exit(1)
 
 
-# Function that grabs the name and country of trending data
+# Function that grabs the name and country id of trending data
 def trends_avail():
     trending = api.trends_available()
     for trend in trending:
         trend_name = trend['name']
         trend_woeid = trend['woeid']
+        store_data(trend_name, trend_woeid)
 
 
-def store_data():
+def store_data(trend_name, trend_woeid):
     insert_query = 'INSERT INTO twitter.twitter_trends_available(name, woeid) VALUES (?,?)'
+    try:
+        print('Inserting data to table')
+        cur.execute(insert_query, (trend_name, trend_woeid))
+        cur.commit()
+    except mariadb.Error as e:
+        print(e)
+    conn.close()
+
+
+trends_avail()
