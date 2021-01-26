@@ -1,7 +1,6 @@
 import os
 import tweepy
 import mariadb
-import sys
 import time
 
 consumer_key = os.getenv("twitter_consumer_key")
