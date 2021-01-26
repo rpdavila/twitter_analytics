@@ -14,7 +14,6 @@ auth.set_access_token(access_token, secret_token)
 
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-
 # connect to db
 try:
     conn = mariadb.connect(
@@ -24,7 +23,7 @@ try:
         port=3306,
         database="twitter"
     )
-    cur = conn.cursor
+    cur = conn.cursor()
 except mariadb.Error as e:
     print(f"Error connecting to MariaDB Platform: {e}")
     sys.exit(1)
@@ -40,14 +39,13 @@ def trends_avail():
 
 
 def store_data(trend_name, trend_woeid):
-    insert_query = 'INSERT INTO twitter.twitter_trends_available(name, woeid) VALUES (?,?)'
     try:
-        print('Inserting data to table')
+        insert_query = 'INSERT INTO twitter.twitter_trends_available(name, woeid) VALUES (?,?)'
         cur.execute(insert_query, (trend_name, trend_woeid))
-        cur.commit()
+        conn.commit()
+        conn.close()
     except mariadb.Error as e:
         print(e)
-    conn.close()
 
 
 trends_avail()
