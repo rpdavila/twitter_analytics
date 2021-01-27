@@ -36,12 +36,15 @@ def store_data(trend_name, trend_woeid):
         )
 
         cur = conn.cursor()
-        insert_query = 'INSERT INTO twitter.twitter_trends_available(name, woeid) VALUES (?,?)'
+        insert_query = 'INSERT INTO twitter.twitter_trends_available(country, woeid) VALUES (?,?)'
         cur.execute(insert_query, (trend_name, trend_woeid))
         conn.commit()
         conn.close()
     except mariadb.Error as e:
         print(e)
 
+
+def retrieve_data():
+    pass
 
 trends_avail()
