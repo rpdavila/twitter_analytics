@@ -55,11 +55,11 @@ def retrieve_data():
         )
 
         cur = conn.cursor()
-        retrieve_data_worldwide = "SELECT * FROM twitter.twitter_trends_available WHERE woeid = '1'"
+        retrieve_data_worldwide = "SELECT * FROM twitter.twitter_trends_available WHERE woeid='1'"
         cur.execute(retrieve_data_worldwide)
-        for woeid in cur:
-            woeid = woeid
+        for country, woeid in cur:
             get_twitter_trends_in_specific_locations(woeid)
+
     except mariadb.Error as e:
         print(e)
 
@@ -67,8 +67,7 @@ def retrieve_data():
 def get_twitter_trends_in_specific_locations(woeid):
     try:
         trending_places = api.trends_place(woeid)
-        for data in trending_places:
-            print(data)
+        print(trending_places)
     except tweepy.TweepError as e:
         print(e.reason)
 
