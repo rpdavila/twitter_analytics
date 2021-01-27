@@ -68,7 +68,8 @@ def retrieve_data():
 def get_twitter_trends_in_specific_locations(country, woeid):
     try:
         trending_places = api.trends_place(woeid)
-        print(country, trending_places)
+        for data in trending_places:
+            print(data)
     except tweepy.TweepError as e:
         print(e.reason)
 
