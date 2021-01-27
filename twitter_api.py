@@ -45,6 +45,23 @@ def store_data(trend_name, trend_woeid):
 
 
 def retrieve_data():
-    pass
+    try:
+        conn = mariadb.connect(
+            user=os.getenv("mariadb_user"),
+            password=os.getenv("mariadb_pass"),
+            host="192.168.1.5",
+            port=3306,
+            database="twitter"
+        )
 
-trends_avail()
+        cur = conn.cursor()
+        retrieve_data_query = "SELECT * FROM twitter.twitter_trends_available"
+        cur.execute(retrieve_data_query)
+        for country, woeid in cur:
+            print(f'{country}, {woeid}')
+    except mariadb.Error as e:
+        print(e)
+
+
+retrieve_data()
+# trends_avail()
