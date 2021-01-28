@@ -21,7 +21,7 @@ def trends_available():
         trend_woeid = trend['woeid']
         store_data(trend_name, trend_woeid)
 
-
+# store data into db table twitter_trends_available
 def store_data(trend_name, trend_woeid):
     try:
         conn = mariadb.connect(
@@ -40,7 +40,7 @@ def store_data(trend_name, trend_woeid):
     except mariadb.Error as e:
         print(e)
 
-
+# main function to retreive data from twitter_trends_available grab the trends and store into twitter trends table
 def retrieve_data():
     try:
         conn = mariadb.connect(
@@ -95,7 +95,7 @@ def insert_data_into_twitter_trends(country, name, url, query, volume, date):
         except mariadb.Error as e:
             print(e)
 
-# uncomment the elow function to pull Country and country Id of available trends in twitter
+# uncomment the below function to pull Country and country Id of available trends in twitter
 # trends_available()
-# uncomment funtion below to pull trending data from twitter
-retrieve_data()
+# uncomment funtion below to pull trending data from twitter Worldwide ID
+# retrieve_data()
