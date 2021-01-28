@@ -94,7 +94,7 @@ def insert_data_into_twitter_trends(country, name, url, query, volume, date):
             conn.close()
         except mariadb.Error as e:
             print(e)
-Print(Done!)
+print(Done!)
 # uncomment the below function to pull Country and country Id of available trends in twitter
 # trends_available()
 # uncomment funtion below to pull trending data from twitter Worldwide ID
