@@ -13,10 +13,6 @@ auth.set_access_token(access_token, secret_token)
 
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-
-# connect to db
-
-
 # Function that grabs the name and country id of trending data
 def trends_available():
     trending = api.trends_available()
