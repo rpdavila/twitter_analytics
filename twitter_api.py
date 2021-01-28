@@ -1,6 +1,7 @@
 import os
 import tweepy
 import mariadb
+import datetime
 
 consumer_key = os.getenv("twitter_consumer_key")
 secret_key = os.getenv("twitter_secret_key")
@@ -74,11 +75,29 @@ def get_twitter_trends_in_specific_locations(country, woeid):
                 url = trends['url']
                 query = trends['query']
                 volume = trends['tweet_volume']
-
-
+                date = datetime.datetime.now()
+                insert_data_into_twitter_trends(country, name, url, query, volume, date)
     except tweepy.TweepError as e:
         print(e.reason)
 
+
+def insert_data_into_twitter_trends(country, name, url, query, volume, date):
+        try:
+            conn = mariadb.connect(
+                user=os.getenv("mariadb_user"),
+                password=os.getenv("mariadb_pass"),
+                host="192.168.1.5",
+                port=3306,
+                database="twitter"
+            )
+
+            cur = conn.cursor()
+            insert_query = 'INSERT INTO twitter.twitter_trends(country, name, url, query, volume, date) VALUES (?,?)'
+            cur.execute(insert_query, (trend_name, trend_woeid))
+            conn.commit()
+            conn.close()
+        except mariadb.Error as e:
+            print(e)
 
 retrieve_data()
 # trends_available()
