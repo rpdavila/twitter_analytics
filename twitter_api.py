@@ -92,8 +92,8 @@ def insert_data_into_twitter_trends(country, name, url, query, volume, date):
             )
 
             cur = conn.cursor()
-            insert_query = 'INSERT INTO twitter.twitter_trends(country, name, url, query, volume, date) VALUES (?,?)'
-            cur.execute(insert_query, (trend_name, trend_woeid))
+            insert_query = 'INSERT INTO twitter.twitter_trends(country, name, url, query, volume, date) VALUES (?,?,?.?.?,?)'
+            cur.execute(insert_query, (country, name, url, query, volume, date))
             conn.commit()
             conn.close()
         except mariadb.Error as e:
