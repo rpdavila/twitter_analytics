@@ -69,7 +69,13 @@ def get_twitter_trends_in_specific_locations(country, woeid):
     try:
         trending_places = api.trends_place(woeid)
         for data in trending_places:
-            print(data)
+            for trends in data['trends']:
+                name = trends['name']
+                url = trends['url']
+                query = trends['query']
+                volume = trends['tweet_volume']
+
+
     except tweepy.TweepError as e:
         print(e.reason)
 
