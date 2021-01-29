@@ -95,7 +95,8 @@ def insert_data_into_twitter_trends(country, name, url, query, volume, date):
             )
 
             cur = conn.cursor()
-            insert_query = 'INSERT INTO twitter.twitter_trends(country, name, url, query, tweet_volume, date) VALUES (?,?,?,?,?,?)'
+            insert_query = 'INSERT INTO twitter.twitter_trends(country, name, url, query, tweet_volume, date) ' \
+                           'VALUES (?,?,?,?,?,?)'
             cur.execute(insert_query, (country, name, url, query, volume, date))
             conn.commit()
             conn.close()
