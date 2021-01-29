@@ -13,9 +13,6 @@ auth.set_access_token(access_token, secret_token)
 
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-user_input = input("Would you like a list of the Countries to be printed for you? (y) or (n)?: ")
-if user_input == 'y':
-    
 
 # Function that grabs the name and country id of trending data
 def trends_available():
@@ -44,7 +41,13 @@ def store_data(trend_name, trend_woeid):
     except mariadb.Error as e:
         print(e)
 
-# main function to retreive data from the table twitter_trends_available grab the trends and store into twitter trends table
+
+"""
+Main function to retrieve data from the table twitter_trends_available. It will grab the trends 
+and store it into twitter trends table
+"""
+
+
 def retrieve_data():
     try:
         conn = mariadb.connect(
@@ -98,8 +101,11 @@ def insert_data_into_twitter_trends(country, name, url, query, volume, date):
             conn.close()
         except mariadb.Error as e:
             print(e)
+
+
 print('Done!')
-# un-comment the below function to pull Country and country Id of available trends in twitter
-# trends_available()
-# un-comment the below function to pull trending data from the database
-# retrieve_data()
+
+user_input = input("Would you like a list of the Countries to be printed for you? (y) or (n)?: ")
+if user_input == 'y':
+    trends_available()
+
