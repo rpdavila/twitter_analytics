@@ -22,6 +22,7 @@ def trends_available():
         trend_woeid = trend['woeid']
         store_data(trend_name, trend_woeid)
 
+
 # store data into db table twitter_trends_available
 def store_data(trend_name, trend_woeid):
     try:
