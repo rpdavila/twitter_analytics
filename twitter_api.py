@@ -75,8 +75,8 @@ def insert_data_into_twitter_trends(country, name, url, query, volume, date):
     try:
         conn = sqlite3.connect('db.sqlite')
         cur = conn.cursor()
-        insert_query = 'INSERT INTO twitter_trends(country, name, url, query, volume, date) ' \
-                       'VALUES (?,?,?,?,?,?)'
+        insert_query = 'INSERT INTO main.twitter_trends(country, name, url, query, volume, date)' \
+                       'VALUES(?,?,?,?,?,?)'
         cur.execute(insert_query, (country, name, url, query, volume, date))
         conn.commit()
         conn.close()
