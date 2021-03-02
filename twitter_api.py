@@ -1,7 +1,8 @@
 import os
 import tweepy
-import mariadb
 import datetime
+import sqlite3
+from sqlite3 import Error
 
 consumer_key = os.getenv("twitter_consumer_key")
 secret_key = os.getenv("twitter_secret_key")
@@ -23,25 +24,17 @@ def trends_available():
         store_data(trend_name, trend_woeid)
 
 
-# store data into db table twitter_trends_available
+# store data into db table twitter_trends_available which will grab the country name and country id
 def store_data(trend_name, trend_woeid):
     try:
-        conn = mariadb.connect(
-            user=os.getenv("mariadb_user"),
-            password=os.getenv("mariadb_pass"),
-            host="192.168.1.5",
-            port=3306,
-            database="twitter"
-        )
-
+        conn = sqlite3.connect('db.sqlite')
         cur = conn.cursor()
-        insert_query = 'INSERT INTO twitter.twitter_trends_available(country, woeid) VALUES (?,?)'
+        insert_query = 'INSERT OR Ignore INTO main.country_id(country, woeid) VALUES (?,?)'
         cur.execute(insert_query, (trend_name, trend_woeid))
         conn.commit()
         conn.close()
-    except mariadb.Error as e:
+    except Error as e:
         print(e)
-
 
 """
 Main function to retrieve data from the table twitter_trends_available. It will grab the trends 
@@ -49,24 +42,17 @@ and store it into twitter trends table
 """
 
 
-def retrieve_data():
+def retrieve_data(field_data):
     try:
-        conn = mariadb.connect(
-            user=os.getenv("mariadb_user"),
-            password=os.getenv("mariadb_pass"),
-            host="192.168.1.5",
-            port=3306,
-            database="twitter"
-        )
-
+        conn = sqlite3.connect('db.sqlite')
         cur = conn.cursor()
-        retrieve_data_worldwide = "SELECT * FROM twitter.twitter_trends_available WHERE woeid='1'"
-        cur.execute(retrieve_data_worldwide)
-        for country, woeid in cur:
-            woeid = woeid
-            country = country
+        get_data = f"SELECT woeid FROM country_id WHERE country='{field_data}'"
+        cur.execute(get_data)
+        for woeid in cur:
+            woeid = woeid[0]
+            country = field_data
             get_twitter_trends_in_specific_locations(country, woeid)
-    except mariadb.Error as e:
+    except Error as e:
         print(e)
 
 
@@ -86,28 +72,13 @@ def get_twitter_trends_in_specific_locations(country, woeid):
 
 
 def insert_data_into_twitter_trends(country, name, url, query, volume, date):
-        try:
-            conn = mariadb.connect(
-                user=os.getenv("mariadb_user"),
-                password=os.getenv("mariadb_pass"),
-                host="192.168.1.5",
-                port=3306,
-                database="twitter"
-            )
-
-            cur = conn.cursor()
-            insert_query = 'INSERT INTO twitter.twitter_trends(country, name, url, query, tweet_volume, date) ' \
-                           'VALUES (?,?,?,?,?,?)'
-            cur.execute(insert_query, (country, name, url, query, volume, date))
-            conn.commit()
-            conn.close()
-        except mariadb.Error as e:
-            print(e)
-
-
-print('Done!')
-
-user_input = input("Would you like a list of the Countries to be printed for you? (y) or (n)?: ")
-if user_input == 'y':
-    trends_available()
-
+    try:
+        conn = sqlite3.connect('db.sqlite')
+        cur = conn.cursor()
+        insert_query = 'INSERT INTO twitter_trends(country, name, url, query, volume, date) ' \
+                       'VALUES (?,?,?,?,?,?)'
+        cur.execute(insert_query, (country, name, url, query, volume, date))
+        conn.commit()
+        conn.close()
+    except Error as e:
+        print(e)
