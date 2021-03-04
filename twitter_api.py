@@ -83,3 +83,14 @@ def insert_data_into_twitter_trends(country, name, url, query, volume, date):
         conn.close()
     except Error as e:
         print(e)
+
+
+def get_name_volume():
+    try:
+        conn = sqlite3.connect('db.sqlite')
+        curs = conn.cursor()
+        query = "SELECT name,volume FROM main.twitter_trends ORDER BY volume DESC"
+        curs.execute(query)
+        return curs.fetchall()
+    except Error as e:
+        print(e)
