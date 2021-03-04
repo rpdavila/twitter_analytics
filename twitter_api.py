@@ -36,6 +36,7 @@ def store_data(trend_name, trend_woeid):
     except Error as e:
         print(e)
 
+
 """
 Main function to retrieve data from the table twitter_trends_available. It will grab the trends 
 and store it into twitter trends table
